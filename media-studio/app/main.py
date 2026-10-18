@@ -9,6 +9,7 @@ import shutil
 import socket
 import time
 import uuid
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Annotated
 from urllib.parse import urlparse
@@ -36,7 +37,15 @@ ALLOWED_URL_EXTENSIONS = ALL_EXTENSIONS
 redis_conn = redis.from_url(REDIS_URL, socket_connect_timeout=2, socket_timeout=2)
 queue = Queue("media-jobs", connection=redis_conn, default_timeout=int(os.getenv("JOB_TIMEOUT", "7200")))
 
-app = FastAPI(title="LumaGlass Studio by EVEL", version="0.2.1")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield
+
+app = FastAPI(
+    title="LumaGlass Studio by EVEL",
+    version="0.2.1",
+    lifespan=lifespan,
+)
 app.mount("/static", StaticFiles(directory=str(STATIC_ROOT)), name="static")
 
 
@@ -363,9 +372,3 @@ async def _stop_cleanup() -> None:
             pass
         finally:
             _cleanup_task = None
-
-
-app.add_event_handler("startup", _start_cleanup)
-app.add_event_handler("shutdown", _stop_cleanup)
-
-
