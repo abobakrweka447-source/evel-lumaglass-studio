@@ -26,7 +26,7 @@ from app.jobs import ALL_EXTENSIONS, IMAGE_EXTENSIONS, MEDIA_ROOT, r2_enabled, r
 
 APP_ROOT = Path(__file__).resolve().parent.parent
 STATIC_ROOT = APP_ROOT / "static"
-REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379/0")
+REDIS_URL = os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0")
 MAX_UPLOAD_MB = max(10, int(os.getenv("MAX_UPLOAD_MB", "500")))
 MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024
 RETENTION_SECONDS = max(3600, int(os.getenv("RETENTION_HOURS", "24")) * 3600)
