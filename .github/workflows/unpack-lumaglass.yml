@@ -6,7 +6,6 @@ on:
 
 permissions:
   contents: write
-  workflows: write
 
 jobs:
   unpack:
@@ -20,6 +19,7 @@ jobs:
           test -f LumaGlass_Studio_Deploy_Package.zip
           unzip -o LumaGlass_Studio_Deploy_Package.zip -d .
           rm LumaGlass_Studio_Deploy_Package.zip
+          rm -f .github/workflows/lumaglass-checks.yml
 
       - name: Commit project files
         run: |
